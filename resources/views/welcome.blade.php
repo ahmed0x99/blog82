@@ -386,7 +386,7 @@
                 </div>
             </div>
             <div class="mt-8 pt-8 border-t border-white/10 text-center text-white/50">
-                <p>&copy; 2024 BlogSphere. All rights reserved.</p>
+                <p>&copy; 2024 BlogSphere. All rights reserved</p>
             </div>
         </div>
     </footer>
