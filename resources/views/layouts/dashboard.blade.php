@@ -1,3 +1,4 @@
+      {{-- @dd(request()->route()->getName()) --}}
 
 
 <!DOCTYPE html>
@@ -215,11 +216,6 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item menu-open">
             <a href="{{route('categories.index')}}" class="nav-link"
-
-            @if (request()->routeIs('categories.index'))
-              class="nav-link active"
-            @endif
-
             >  
               <i class="nav-icon fas fa-th"></i>
               <p>
@@ -231,9 +227,7 @@
 
            <li class="nav-item menu-open">
             <a href="{{route('users.index')}}" class="nav-link "
-            @if(Request::route()->getName() == 'users.index')
-              class="nav-item active"
-            @endif
+           
             >  
               <i class="nav-icon fas fa-users"></i>
               <p>
@@ -243,7 +237,10 @@
             </a>
           </li>
 
+
           
+
+           
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           {{-- <li class="nav-item menu-open">

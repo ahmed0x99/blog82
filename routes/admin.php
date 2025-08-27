@@ -10,7 +10,8 @@ Route::resource("categories", CategoryController::class)->middleware('auth');
 Route::get("/users" , [UserController::class , "index"])->name("users.index");
 Route::delete("/users/{user}" , [UserController::class , "destroy"])->name("users.destroy");
 
-Route::get("/posts/{id}" , [PostController::class , "index"])->name("posts.index");
-Route::delete("/posts/{post}" , [PostController::class , "destroy"])->name("posts.destroy");
+Route::get("/user/{id}/posts" , [PostController::class , "index"])->name("posts.index");
+Route::resource("posts", PostController::class)->except(['index'])
+->middleware('auth');
 
 ?>

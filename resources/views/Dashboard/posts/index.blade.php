@@ -7,6 +7,7 @@
                 <h3 class="card-title">Users</h3>
               </div>
               <!-- /.card-header -->
+              <a href="{{route("posts.create")}}" class="btn btn-success w-50 mx-auto mt-2">Add Post</a>
               <div class="card-body">
                 <table class="table table-bordered">
                   <thead>
