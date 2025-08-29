@@ -29,6 +29,8 @@
                       <td class="text-center">{{$item->title}}</td>
                       <td class="text-center">{{$item->category->name}}</td>
                       <td class="text-center">
+                        <a href="{{route("posts.edit" , $item->id)}}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{route("posts.show" , $item->id)}}" class="btn btn-sm btn-info">Show</a>
                         <form class="d-inline" action="{{route("posts.destroy" , $item->id)}}" method="post">
                             @csrf
                             @method("DELETE")

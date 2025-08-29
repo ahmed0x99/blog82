@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -12,8 +17,10 @@ class PostController extends Controller
      */
     public function index($id)
     {
-     
-        dd($id);
+        $user = User::findOrFail($id);
+        $posts = $user->posts;
+     return view("Dashboard.posts.index" , compact("posts"));
+        // dd($id);
         //
     }
 
@@ -34,19 +41,21 @@ class PostController extends Controller
     {
         // dd($request->all());
         $clean = $request->validate([
-            "name" => "required|string|max:255",
+            "title" => "required|string|max:255",
             // "slug" => "required|string|max:255|unique:posts,slug",
             "body" => "required|string",
-            "image" => "required|image|mimes:jpeg,png,jpg,gif,svg|max:2048", // Validate image file
-            // "category_id" => "required|exists:categories,id"
+            "cover_image" => "required|image|mimes:jpeg,png,jpg,gif,svg|max:2048", // Validate image file
+            "category_id" => "required|exists:categories,id"
         ]);
 
-        if ($request->hasFile('image')) {
-            
-        }
-        dd($clean);
+        $path = $request->file("cover_image")->store("x" , "public");
+        $clean['cover_image'] = $path;
+        $clean['slug'] = Str::slug($clean['title']) . "-" . time();
+        $clean['user_id'] = Auth::user()->id;
+        Post::create($clean);
+        return redirect()->route("posts.index" , Auth::user()->id);
 
-        //
+        
     }
 
     /**
@@ -54,7 +63,8 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        return view("Dashboard.posts.show" , compact("post"));
     }
 
     /**
@@ -62,7 +72,10 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
+        $post = Post::findOrFail($id);
+        return view("Dashboard.posts.edit" , compact("post"));
+
     }
 
     /**
@@ -70,7 +83,27 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $clean = $request->validate([
+            "title" => "required|string|max:255",
+            // "slug" => "required|string|max:255|unique:posts,slug,".$post->id,
+            "body" => "required|string",
+            "cover_image" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048", // Validate image file
+            "category_id" => "required|exists:categories,id"
+        ]);
+
+        if($request->hasFile("cover_image")){
+            // Delete the old image if exists
+            if ($post->cover_image) {
+                Storage::disk('public')->delete($post->cover_image);
+            }
+            $path = $request->file("cover_image")->store("x" , "public");
+            $clean['cover_image'] = $path;
+        }
+
+        $clean['slug'] = Str::slug($clean['title']) . "-" . time();
+        $post->update($clean);
+        return redirect()->route("posts.index" , Auth::user()->id);
     }
 
     /**
@@ -78,6 +111,10 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        Storage::disk('public')->delete($post->cover_image);
+        $post->delete();
+
+        return redirect()->route("posts.index" , Auth::user()->id);
     }
 }
