@@ -10,11 +10,7 @@
       <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
         <div class="card border border-light-subtle rounded-3 shadow-sm">
           <div class="card-body p-3 p-md-4 p-xl-5">
-            {{-- <div class="text-center mb-3">
-              <a href="#!">
-                <img src="./assets/img/bsb-logo.svg" alt="BootstrapBrain Logo" width="175" height="57">
-              </a>
-            </div> --}}
+           
             <h2 class="fs-6 fw-normal text-center text-secondary mb-4">Edit Post</h2>
             <form action="{{ route('posts.update', $post->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
@@ -25,10 +21,11 @@
                       <label for="title" class="form-label">Title</label>
                     <input type="text" class="form-control" name="title" id="title" placeholder="Title" required value="{{ old('title', $post->title) }}">
                   </div>
+
                   @error('title')
                     <div class="alert alert-danger">{{ $message }}</div>
-
                   @enderror
+                  
                 </div>
              
                 <div class="col-12">
